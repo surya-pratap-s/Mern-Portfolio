@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAcademics, createAcademic, updateAcademic, deleteAcademic } from '../controllers/AcademicController.js';
+import { getAcademics, createAcademic, updateAcademic, deleteAcademic } from '../controllers/AcademicControllers.js';
 import { verifyToken } from '../middleware/authMiddleware.js';
 
 const router = express.Router();

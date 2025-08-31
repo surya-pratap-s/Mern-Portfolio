@@ -1,5 +1,5 @@
 import express from "express";
-import { getBasicDetails, saveBasicDetails, addSkill, removeSkill, addSocialLink, removeSocialLink } from "../controllers/BasicDetailsController.js";
+import { getBasicDetails, saveBasicDetails, addSkill, removeSkill, addSocialLink, removeSocialLink } from "../controllers/BasicDetailsControllers.js";
 import { upload } from "../middleware/upload.js";
 import { verifyToken } from "../middleware/authMiddleware.js";
 

@@ -1,6 +1,6 @@
 import express from 'express';
 import { verifyToken } from '../middleware/authMiddleware.js';
-import { createExperience, deleteExperience, getExperiences, updateExperience } from '../controllers/ExperienceController.js';
+import { createExperience, deleteExperience, getExperiences, updateExperience } from '../controllers/ExperienceControllers.js';
 
 const router = express.Router();
 
