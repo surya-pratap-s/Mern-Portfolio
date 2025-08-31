@@ -1,10 +1,5 @@
 import express from 'express';
-import {
-  getContacts,
-  createContact,
-  markAsRead,
-  deleteContact
-} from '../controllers/contactController.js';
+import { getContacts, createContact, markAsRead, deleteContact } from '../controllers/ContactController.js';
 import { verifyToken } from '../middleware/authMiddleware.js';
 
 const router = express.Router();

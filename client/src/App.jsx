@@ -1,21 +1,25 @@
-import { Suspense, lazy } from "react"
+import { Suspense } from "react"
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 
 import { AuthProvider, useAuth } from './context/AuthContext';
-import ProtectedRoute from "./components/ProtectedRoute"
 
+import ProtectedRoute from "./components/ProtectedRoute"
 import Loading from "./components/Loading";
-import AdminRegister from "./pages/AdminRegister";
-import AdminChangePassword from "./pages/AdminChangePassword";
-import AdminHome from "./pages/AdminHome";
-import AdminLogin from "./pages/AdminLogin";
 import AdminLayout from "./components/AdminLayout";
-import BasicDetails from "./pages/BasicDetails";
-import AcademicsPage from "./pages/AcademicsPage";
+
+import AdminLogin from "./pages/Admin/AdminLogin";
+import AdminRegister from "./pages/Admin/AdminRegister";
+import AdminChangePassword from "./pages/Admin/AdminChangePassword";
+import AdminHome from "./pages/Admin/AdminHome";
+import BasicDetails from "./pages/AddData/BasicDetails";
+import AcademicsPage from "./pages/AddData/AcademicsPage";
+import ExperiencePages from "./pages/AddData/ExperiencePages";
+import ProjectsPages from "./pages/AddData/ProjectsPages";
 import Home from "./pages/Home";
+import CertificatePage from "./pages/AddData/CertificatePage";
 
 function AppRoutes() {
   const { loading, isAuthenticated } = useAuth();
@@ -27,7 +31,7 @@ function AppRoutes() {
       <Routes>
         <Route path="/" element={<Home />} />
 
-        {/* <Route path="/register" element={isAuthenticated ? <Navigate to="/admin/dashboard" /> : <AdminRegister />} /> */}
+        <Route path="/register" element={isAuthenticated ? <Navigate to="/admin/dashboard" /> : <AdminRegister />} />
         <Route path="/login" element={isAuthenticated ? <Navigate to="/admin/dashboard" /> : <AdminLogin />} />
         <Route path="/forget" element={isAuthenticated ? <Navigate to="/admin/dashboard" /> : <AdminLogin />} />
         <Route path="/admin" element={isAuthenticated ? <Navigate to="/admin/dashboard" /> : <AdminLogin />} />
@@ -39,8 +43,12 @@ function AppRoutes() {
         }>
           <Route path="dashboard" element={<AdminHome />} />
           <Route path="change-password" element={<AdminChangePassword />} />
+
           <Route path="basic-details" element={<BasicDetails />} />
           <Route path="academics" element={<AcademicsPage />} />
+          <Route path="experience" element={<ExperiencePages />} />
+          <Route path="projects" element={<ProjectsPages />} />
+          <Route path="certificate" element={<CertificatePage />} />
         </Route>
       </Routes>
     </Suspense>

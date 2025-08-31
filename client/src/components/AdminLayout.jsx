@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useProfileApi } from "../api/useApi";
 
 const menuData = [
   { title: "Dashboard", link: "/admin/dashboard", icon: "bi-speedometer2" },
@@ -9,10 +11,8 @@ const menuData = [
     icon: "bi-person-gear",
     collapse: true,
     subMenu: [
-      {
-        title: "Change Password",
-        link: "/admin/change-password",
-      }
+      { title: "Change Password", link: "/admin/change-password", icon: "bi-eye-fill" },
+      { title: "Logout", icon: "bi-box-arrow-right" }
     ]
   },
   { title: "Basic Details", link: "/admin/basic-details", icon: "bi-person-badge" },
@@ -23,7 +23,10 @@ const menuData = [
 ];
 
 const AdminLayout = () => {
+  const { logout } = useAuth();
   const location = useLocation();
+  const { profile } = useProfileApi();
+
   const [dateTime, setDateTime] = useState(new Date());
   const isActive = (link) => link && location.pathname === link;
   const [isIcon, setIsIcon] = useState(false);
@@ -52,6 +55,7 @@ const AdminLayout = () => {
     };
   }, [isIcon]);
 
+
   const handleClickIcon = () => setIsIcon(prev => !prev);
   const handleClickSidebar = () => setIsSidebar(prev => !prev);
 
@@ -75,11 +79,11 @@ const AdminLayout = () => {
         <div className="navbar-menu-wrapper d-flex align-items-center justify-content-end">
           <ul className="navbar-nav me-lg-2">
             <li className="nav-item nav-profile dropdown">
-              <a className="nav-link" href="#" data-bs-toggle="dropdown" id="profileDropdown">
-                <img src="/assets/img/face.jpg" alt="profile" />
-                <span className="nav-profile-name">Developer</span>
-              </a>
-              <div className="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+              <span className="nav-link" data-bs-toggle="dropdown" id="profileDropdown">
+                <img src={profile?.profileImage ? `${import.meta.env.VITE_FILE_BASE_URL}${profile.profileImage}` : "/assets/img/face.jpg"} alt="profile" />
+                <span className="nav-profile-name">{profile?.fullName || "Developer"}</span>
+              </span>
+              <div onClick={logout} className="dropdown-menu dropdown-menu-right navbar-dropdown py-0" aria-labelledby="profileDropdown">
                 <a className="dropdown-item"><i className="typcn typcn-eject text-primary" />Logout</a>
               </div>
             </li>
@@ -135,32 +139,41 @@ const AdminLayout = () => {
 
       <div className="container-fluid page-body-wrapper" style={{ overflow: "hidden" }}>
         <nav className={`sidebar sidebar-offcanvas ${isSidebar ? 'active' : ''}`} id="sidebar">
-          <ul className="nav">
+          <ul className={`nav ${isIcon ? "px-1" : ""}`}>
             {menuData.map((item, index) => {
               const hasActiveSub = item.subMenu?.some(sub => isActive(sub.link));
               const isItemActive = isActive(item.link) || hasActiveSub;
 
               return (
-                <li key={index} className={`nav-item mb-2 ${isItemActive ? "active" : ""} ${isIcon ? "" : "card"}`}>
+                <li key={index} className={`nav-item mb-2 rounded-2 border-0 overflow-hidden ${isItemActive ? "active shadow-lg" : ""} ${isIcon ? "" : "card"}`}>
                   {!item.collapse ? (
                     <a className="nav-link" href={item.link}>
                       <i className={`bi ${item.icon} menu-icon`} />
                       <span className="menu-title">{item.title}</span>
                     </a>
                   ) : (<>
-                    <a className="nav-link" data-bs-toggle="collapse" href={item.link} aria-expanded={hasActiveSub ? "true" : "false"} aria-controls={item.title}>
+                    <Link className="nav-link" data-bs-toggle="collapse" to={item.link} aria-expanded={hasActiveSub ? "true" : "false"} aria-controls={item.title}>
                       <i className={`bi ${item.icon} menu-icon`} />
                       <span className="menu-title">{item.title}</span>
                       <i className="menu-arrow" />
-                    </a>
+                    </Link>
                     <div className={`collapse ${hasActiveSub ? "show" : ""}`} id={item.title}>
-                      <ul className="nav flex-column sub-menu">
+                      <div className="nav flex-column sub-menu">
                         {item.subMenu.map((sub, i) => (
-                          <li key={i} className={`nav-item ${isActive(sub.link) ? "active" : ""}`}>
-                            <a href={sub.link} className="nav-link">{sub.title}</a>
-                          </li>
+                          sub.title === "Logout" ? (
+                            <span key={i} onClick={logout} className="nav-item justify-content-start gap-2 rounded-0 text-start w-100 text-black" >
+                              <i className={`bi ${sub.icon} menu-icon `} />
+                              <span>{sub.title}</span>
+                            </span>
+                          ) : (
+                            <Link key={i} to={sub.link} className={`nav-item justify-content-start text-black gap-2 ${isActive(sub.link) ? "active" : ""}`}>
+                              <i className={`bi ${sub.icon} menu-icon`} />
+                              <span>{sub.title}</span>
+                            </Link>
+                          )
                         ))}
-                      </ul>
+
+                      </div>
                     </div>
                   </>)}
                 </li>

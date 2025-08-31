@@ -1,10 +1,5 @@
 import express from 'express';
-import {
-  getProjects,
-  createProject,
-  updateProject,
-  deleteProject
-} from '../controllers/projectController.js';
+import { getProjects, createProject, updateProject, deleteProject } from '../controllers/ProjectController.js';
 import { verifyToken } from '../middleware/authMiddleware.js';
 
 const router = express.Router();

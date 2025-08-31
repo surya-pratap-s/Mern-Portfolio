@@ -13,4 +13,4 @@ const profileSchema = new mongoose.Schema({
     socialLinks: [{ title: String, url: String }]
 });
 
-export default mongoose.model("Profile", profileSchema);
+export default mongoose.model("BasicDetails", profileSchema);

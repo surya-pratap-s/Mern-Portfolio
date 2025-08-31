@@ -1,4 +1,4 @@
-import Academic from '../models/Academic.js';
+import Academic from '../models/Academics.js';
 
 export const getAcademics = async (req, res) => {
     try {

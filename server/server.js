@@ -2,13 +2,14 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
-import authRoutes from './routes/auth.js';
-import projectRoutes from './routes/projects.js';
-import academicRoutes from './routes/academics.js';
-import certificateRoutes from './routes/certificates.js';
-import resumeRoutes from './routes/resume.js';
-import contactRoutes from './routes/contact.js';
-import profileRoutes from './routes/profileRoutes.js';
+import UserRoute from './routes/UserRoute.js';
+import BasicDetailsRoute from './routes/BasicDetailsRoute.js';
+import ProjectRoute from './routes/ProjectRoute.js';
+import AcademicRoute from './routes/AcademicRoute.js';
+import ExperienceRoute from './routes/ExperienceRoute.js';
+
+import CertificateRoute from './routes/CertificateRoute.js';
+import ContactRoute from './routes/ContactRoute.js';
 
 // Load environment variables
 dotenv.config();
@@ -25,7 +26,7 @@ ConnectDB();
 app.use(express.json());
 
 // CORS Configuration
-const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174'];
+const allowedOrigins = ['http://localhost:5173'];
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -38,15 +39,17 @@ app.use(cors({
 }));
 
 // API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/projects', projectRoutes);
-app.use('/api/academics', academicRoutes);
-app.use('/api/certificates', certificateRoutes);
-app.use('/api/resume', resumeRoutes);
-app.use('/api/contact', contactRoutes);
+app.use('/api/auth', UserRoute);
+app.use("/api/profile", BasicDetailsRoute);
+
+app.use('/api/projects', ProjectRoute);
+app.use('/api/academics', AcademicRoute);
+app.use('/api/experiences', ExperienceRoute);
+app.use('/api/certificates', CertificateRoute);
+
+app.use('/api/contact', ContactRoute);
 
 app.use("/uploads", express.static("uploads")); // serve files
-app.use("/api/profile", profileRoutes);
 
 // Root route
 app.get('/', (req, res) => {

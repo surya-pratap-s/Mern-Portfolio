@@ -1,4 +1,4 @@
-import Certificate from '../models/Certificate.js';
+import Certificate from '../models/Certificates.js';
 
 export const getCertificates = async (req, res) => {
     try {
