@@ -26,7 +26,7 @@ ConnectDB();
 app.use(express.json());
 
 // CORS Configuration
-const allowedOrigins = ['http://localhost:5173'];
+const allowedOrigins = ['http://localhost:5173', 'https://mern-portfolio-ten-nu.vercel.app'];
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
