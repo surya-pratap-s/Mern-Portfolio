@@ -9,7 +9,6 @@ import AcademicRoute from './routes/AcademicRoute.js';
 import ExperienceRoute from './routes/ExperienceRoute.js';
 
 import CertificateRoute from './routes/CertificateRoute.js';
-import ContactRoute from './routes/ContactRoute.js';
 
 // Load environment variables
 dotenv.config();
@@ -46,8 +45,6 @@ app.use('/api/projects', ProjectRoute);
 app.use('/api/academics', AcademicRoute);
 app.use('/api/experiences', ExperienceRoute);
 app.use('/api/certificates', CertificateRoute);
-
-app.use('/api/contact', ContactRoute);
 
 app.use("/uploads", express.static("uploads")); // serve files
 
