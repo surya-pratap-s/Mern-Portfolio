@@ -13,7 +13,7 @@ export const getBasicDetails = async (req, res) => {
 // Create or Update BasicDetails (replace old files if re-uploaded)
 export const saveBasicDetails = async (req, res) => {
     try {
-        const { fullName, role, bio, email, phone, location } = req.body;
+        const { fullName, role, bio, email, phone, location, profileImage, resume } = req.body;
 
         let basicDetails = await BasicDetails.findOne(); // single BasicDetails for demo
         if (!basicDetails) basicDetails = new BasicDetails();
@@ -24,22 +24,24 @@ export const saveBasicDetails = async (req, res) => {
         basicDetails.email = email;
         basicDetails.phone = phone;
         basicDetails.location = location;
+        basicDetails.profileImage = profileImage;
+        basicDetails.resume = resume;
 
         // Handle BasicDetails Image update
-        if (req.files?.profileImage) {
-            if (basicDetails.profileImage && fs.existsSync(basicDetails.profileImage)) {
-                fs.unlinkSync(basicDetails.profileImage); // delete old
-            }
-            basicDetails.profileImage = req.files.profileImage[0].path;
-        }
+        // if (req.files?.profileImage) {
+        //     if (basicDetails.profileImage && fs.existsSync(basicDetails.profileImage)) {
+        //         fs.unlinkSync(basicDetails.profileImage); // delete old
+        //     }
+        //     basicDetails.profileImage = req.files.profileImage[0].path;
+        // }
 
         // Handle Resume update
-        if (req.files?.resume) {
-            if (basicDetails.resume && fs.existsSync(basicDetails.resume)) {
-                fs.unlinkSync(basicDetails.resume); // delete old
-            }
-            basicDetails.resume = req.files.resume[0].path;
-        }
+        // if (req.files?.resume) {
+        //     if (basicDetails.resume && fs.existsSync(basicDetails.resume)) {
+        //         fs.unlinkSync(basicDetails.resume); // delete old
+        //     }
+        //     basicDetails.resume = req.files.resume[0].path;
+        // }
 
         await basicDetails.save();
         res.json({ success: true, basicDetails });

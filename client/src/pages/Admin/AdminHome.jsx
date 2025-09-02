@@ -147,7 +147,7 @@ export default function AdminHome() {
                 <div className="card-body text-center">
 
                     {/* Profile Image & Name */}
-                    <img src={profile?.profileImage ? `${File_Url}${profile.profileImage}` : "/assets/img/face.jpg"} height={100} width={100} className="img-lg rounded-circle mb-3 shadow-sm" alt="profile image" />
+                    <img src={profile?.profileImage || "/assets/img/face.jpg"} height={100} width={100} className="img-lg rounded-circle mb-3 shadow-sm" alt="profile image" />
                     <h4 className="fw-bold mb-2">{profile?.fullName}</h4>
 
                     {/* Roles */}
@@ -169,7 +169,7 @@ export default function AdminHome() {
                         <div className="d-flex flex-wrap justify-content-center mt-3">
                             {profile.socialLinks.map((link, index) => (
                                 <a key={index} href={link.url} target="_blank" rel="noreferrer" className="btn btn-primary btn-sm me-2 mb-2 px-3">
-                                    
+                                    {link.title}
                                 </a>
                             ))}
                         </div>
@@ -254,7 +254,7 @@ export default function AdminHome() {
                                 </td>
                                 <td>
                                     {profile?.resume ? (
-                                        <Link to={`${File_Url}${profile?.resume}`} target="_blank" rel="noreferrer" className="badge bg-primary bg-gradient text-light fs-6 px-3 py-2 text-nowrap">
+                                        <Link to={profile?.resume} target="_blank" rel="noreferrer" className="badge bg-primary bg-gradient text-light fs-6 px-3 py-2 text-nowrap">
                                             <i className="bi bi-box-arrow-up-right me-1"></i> View
                                         </Link>
                                     ) : (

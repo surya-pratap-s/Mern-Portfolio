@@ -80,7 +80,7 @@ const AdminLayout = () => {
           <ul className="navbar-nav me-lg-2">
             <li className="nav-item nav-profile dropdown">
               <span className="nav-link" data-bs-toggle="dropdown" id="profileDropdown">
-                <img src={profile?.profileImage ? `${import.meta.env.VITE_FILE_BASE_URL}${profile.profileImage}` : "/assets/img/face.jpg"} alt="profile" />
+                <img src={profile?.profileImage || "/assets/img/face.jpg"} alt="profile" />
                 <span className="nav-profile-name">{profile?.fullName || "Developer"}</span>
               </span>
               <div onClick={logout} className="dropdown-menu dropdown-menu-right navbar-dropdown py-0" aria-labelledby="profileDropdown">

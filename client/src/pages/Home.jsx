@@ -79,14 +79,14 @@ export default function Home() {
                 </div>
 
                 <div className="d-flex gap-3 justify-content-center justify-content-lg-start">
-                  <button onClick={() => handleDownload(`${File_Url}${profile.resume}`, `${profile?.fullName || "resume"}.pdf`)} className="btn btn-neon">
+                  <button onClick={() => handleDownload(`${profile.resume}`, `${profile?.fullName || "resume"}.pdf`)} className="btn btn-neon">
                     <i className="bi bi-eye-fill me-2">
                     </i>View Resume
                   </button>
                 </div>
               </div>
               <div className="col-lg-6 text-center fade-in">
-                <img src={profile?.profileImage ? `${File_Url}${profile.profileImage}` : "/assets/img/face.jpg"} alt="Profile" className="profile-image" />
+                <img src={profile?.profileImage || "/assets/img/face.jpg"} alt="Profile" className="profile-image" />
               </div>
             </div>
           </div>

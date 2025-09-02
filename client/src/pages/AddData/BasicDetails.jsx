@@ -2,14 +2,31 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useProfileApi } from "../../api/useApi";
 
-const File_Url = import.meta.env.VITE_FILE_BASE_URL;
+// const File_Url = import.meta.env.VITE_FILE_BASE_URL;
+
+// utils/getDirectDriveLink.js
+export const getDirectDriveLink = (url) => {
+    try {
+        // Example: https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+        const match = url.match(/\/d\/(.*?)\//);
+        if (match && match[1]) {
+            return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+        }
+        return url; // अगर match न हुआ तो original URL return कर दो
+    } catch (error) {
+        console.error("Invalid Google Drive link:", url);
+        return url;
+    }
+};
+
+
 
 export default function BasicDetails() {
     const { profile, loadingProfile, saveProfile, addSkill, removeSkill, addSocialLink, removeSocialLink, } = useProfileApi();
 
-    const [form, setForm] = useState({ fullName: "", role: "", bio: "", email: "", phone: "", location: "", });
-    const [profileImage, setProfileImage] = useState(null);
-    const [resumePreview, setResumePreview] = useState(null);
+    const [form, setForm] = useState({ fullName: "", role: "", bio: "", email: "", phone: "", location: "", profileImage: "", resume: "" });
+    // const [profileImage, setProfileImage] = useState(null);
+    // const [resumePreview, setResumePreview] = useState(null);
     const [newSkill, setNewSkill] = useState("");
     const [social, setSocial] = useState({ title: "", url: "" });
 
@@ -23,13 +40,16 @@ export default function BasicDetails() {
                 email: profile.email || "",
                 phone: profile.phone || "",
                 location: profile.location || "",
+
+                profileImage: profile.profileImage || "",
+                resume: profile.resume || "",
             });
-            if (profile.profileImage) {
-                setProfileImage(`${File_Url}${profile.profileImage}`);
-            }
-            if (profile.resume) {
-                setResumePreview(`${File_Url}${profile.resume}`);
-            }
+            // if (profile.profileImage) {
+            //     setProfileImage(`${File_Url}${profile.profileImage}`);
+            // }
+            // if (profile.resume) {
+            //     setResumePreview(`${File_Url}${profile.resume}`);
+            // }
         }
     }, [profile]);
 
@@ -38,35 +58,39 @@ export default function BasicDetails() {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleImageChange = (e) => {
-        if (e.target.files[0]) {
-            setProfileImage(URL.createObjectURL(e.target.files[0]));
-            setForm({ ...form, profileImageFile: e.target.files[0] });
-        }
-    };
+    // const handleImageChange = (e) => {
+    //     if (e.target.files[0]) {
+    //         setProfileImage(URL.createObjectURL(e.target.files[0]));
+    //         setForm({ ...form, profileImageFile: e.target.files[0] });
+    //     }
+    // };
 
-    const handleResumeChange = (e) => {
-        if (e.target.files[0]) {
-            setResumePreview(URL.createObjectURL(e.target.files[0]));
-            setForm({ ...form, resumeFile: e.target.files[0] });
-        }
-    };
+    // const handleResumeChange = (e) => {
+    //     if (e.target.files[0]) {
+    //         setResumePreview(URL.createObjectURL(e.target.files[0]));
+    //         setForm({ ...form, resumeFile: e.target.files[0] });
+    //     }
+    // };
 
     const handleSave = async () => {
         const formData = new FormData();
 
-        // Add all form fields except files
         Object.keys(form).forEach((key) => {
-            if (key !== "profileImageFile" && key !== "resumeFile") {
-                formData.append(key, form[key]);
-            }
+            formData.append(key, form[key]);
         });
 
+        // Add all form fields except files
+        // Object.keys(form).forEach((key) => {
+        //     if (key !== "profileImageFile" && key !== "resumeFile") {
+        //         formData.append(key, form[key]);
+        //     }
+        // });
+
         // Add profile image file if exists
-        if (form.profileImageFile) { formData.append("profileImage", form.profileImageFile); }
+        // if (form.profileImageFile) { formData.append("profileImage", form.profileImageFile); }
 
         // Add resume file if exists
-        if (form.resumeFile) { formData.append("resume", form.resumeFile); }
+        // if (form.resumeFile) { formData.append("resume", form.resumeFile); }
 
         await saveProfile(formData);
     };
@@ -109,20 +133,18 @@ export default function BasicDetails() {
                         <div className="text-center mb-5">
                             <div className="position-relative d-inline-block mb-2 mb-md-3">
                                 <label htmlFor="profileImage" className="d-block" style={{ cursor: "pointer" }}>
-                                    {profileImage ? (
-                                        <img src={profileImage} alt="Profile" className="rounded-circle border border-4 custom-profile-img" style={{ borderColor: "#667eea !important" }} />
-                                    ) : (
-                                        <img src={"/assets/img/face.jpg"} alt="Profile" className="rounded-circle border border-4 custom-profile-img" style={{ borderColor: "#667eea !important" }} />
-                                    )}
+                                    <img src={form.profileImage  || "/assets/img/face.jpg"} alt="Profile" className="rounded-circle border border-4 custom-profile-img" style={{ borderColor: "#667eea !important" }} />
+
                                     <div className="camera-overlay"><i className="bi bi-camera-fill"></i></div>
                                 </label>
-                                <input id="profileImage" type="file" accept="image/*" className="d-none" onChange={handleImageChange} />
+                                {/* <input id="profileImage" type="file" accept="image/*" className="d-none" onChange={handleImageChange} /> */}
                             </div>
 
-                            <p className="text-muted small">
-                                <i className="bi bi-info-circle me-1"></i>
-                                Click to upload profile picture
-                            </p>
+                            {/* <p className="text-muted small"> <i className="bi bi-info-circle me-1"></i> Click to upload profile picture  </p> */}
+                            <div className="col-md-12 text-start">
+                                <label className="form-label text-dark fw-semibold small">Profile Url</label>
+                                <input type="text" name="profileImage" value={form.profileImage} onChange={handleChange} className="form-control border-2 py-2" placeholder="https://www.img.com/image.jpg" style={{ borderColor: "#e2e8f0", borderRadius: "5px" }} />
+                            </div>
                         </div>
 
                         {/* Basic Information */}
@@ -176,13 +198,19 @@ export default function BasicDetails() {
                                 Resume
                             </h5>
 
-                            <div className="input-icon w-100">
+                            {/* <div className="input-icon w-100">
                                 <i className="bi bi-cloud-upload"></i>
                                 <input type="file" className="form-control border-2 py-2" accept=".pdf,.doc,.docx" onChange={handleResumeChange} style={{ borderColor: "#e2e8f0", borderRadius: "5px" }} />
+                            </div> */}
+
+                            <div className="col-md-12">
+                                <label className="form-label text-dark fw-semibold small">Resume Url</label>
+                                <input type="text" name="resume" value={form.resume} onChange={handleChange} className="form-control border-2 py-2" placeholder="https://drive-link.com/reume.pdf" style={{ borderColor: "#e2e8f0", borderRadius: "5px" }} />
                             </div>
-                            {resumePreview &&
+
+                            {form.resume &&
                                 <div className="resume-preview">
-                                    <Link to={resumePreview} target="_blank" rel="noreferrer" className="btn btn-link text-nowrap fs-9">
+                                    <Link to={form.resume} target="_blank" rel="noreferrer" className="btn btn-link text-nowrap fs-9">
                                         View Selected Resume
                                     </Link>
                                 </div>
